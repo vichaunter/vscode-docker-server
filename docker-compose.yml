@@ -1,0 +1,30 @@
+version: '3'
+services:
+  coder:
+    container_name: ${COMPOSE_PROJECT_NAME} 
+    build:
+      context: .
+      dockerfile: "Dockerfile.${PROJECT_TYPE}"
+      args:
+        USER: coder
+        UID: ${USER_ID}
+        GID: ${GROUP_ID}
+    environment:
+      - PASSWORD=toor
+      - DOCKER_USER=coder
+      - HTTPS_ENABLED=false
+      - APP_PORT=8443
+      - APP_BIND_HOST=0.0.0.0
+      - GIT_USER=VicHaunter
+      - GIT_EMAIL=vichaunter@gmail.com
+      - EXTENSIONS=orta.vscode-jest,mgmcdermott.vscode-language-babel,mikestead.dotenv,esbenp.prettier-vscode,editorconfig.editorconfig,dbaeumer.vscode-eslint,eamodio.gitlens,formulahendry.auto-rename-tag,dsznajder.es7-react-js-snippets,vscode-icons-team.vscode-icons,aaron-bond.better-comments,donjayamanne.githistory,streetsidesoftware.code-spell-checker
+
+      # - EXTENSIONS=ms-python.python,ms-toolsai.jupyter,tushortz.python-extended-snippets,andyyaldoo.vscode-json,golang.go,redhat.vscode-yaml,vscode-icons-team.vscode-icons
+    user: "${USER_ID}:${GROUP_ID}"
+    volumes:
+      - "${PWD}/workspace:/home/coder/workspace"
+      - "${PWD}/config:/home/coder/.config"
+      - "${PWD}/vscode_configs/${PROJECT_TYPE}:/home/coder/workspace/.vscode"
+    ports:
+      - 8443:8443
+      - "3000-3100:3000-3100"
